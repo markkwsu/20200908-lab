@@ -1,0 +1,101 @@
+{
+	"kind": "StatefulSet",
+	"apiVersion": "apps/v1",
+	"metadata": {
+		"name": "demo-xsld"
+	},
+	"spec": {
+		"selector": {
+			"matchLabels": {
+				"app": "demo-xsld"
+			}
+		},
+		"serviceName": "demo-xsld",
+		"replicas": 2,
+		"template": {
+			"metadata": {
+				"creationTimestamp": null,
+				"labels": {
+					"app": "demo-xsld"
+				}
+			},
+			"spec": {
+				"hostNetwork": true,
+				"containers": [{
+					"name": "demo-xsld",
+					"image": "asia.gcr.io/first-demo-marksu-001/demo-xsld:v1",
+					"env": [{
+						"name": "LICENSE",
+						"value": "accept"
+					},
+					{
+						"name": "MEMBER_NAME",
+						"valueFrom": {
+							"fieldRef": {
+								"apiVersion": "v1",
+								"fieldPath": "metadata.name"
+							}
+						}
+					},
+					{
+						"name": "CACHE_GROUP",
+						"value": "demo-xsld"
+					},
+					{
+						"name": "MEMBER_CAP",
+						"value": "4"
+					},
+					{
+						"name": "SECRET_KEY",
+						"valueFrom": {
+							"secretKeyRef": {
+								"name": "demo-xsld-secret",
+								"key": "secretKey"
+							}
+						}
+					},
+					{
+						"name": "XSADMIN_PWD",
+						"valueFrom": {
+							"secretKeyRef": {
+								"name": "demo-xsld-secret",
+								"key": "xsadminPass"
+							}
+						}
+					}],
+					"ports": [{
+						"containerPort": 9443,
+						"hostPort": 9443,
+						"protocol": "TCP"
+					},
+					{
+						"containerPort": 9444,
+						"hostPort": 9444,
+						"protocol": "TCP"
+					},
+					{
+						"containerPort": 9445,
+						"hostPort": 9445,
+						"protocol": "TCP"
+					}],
+					"terminationMessagePath": "/dev/termination-log",
+					"imagePullPolicy": "Always",
+					"volumeMounts": [{
+						"name": "demo-xsld-volume",
+						"mountPath": "/vol"
+					}]
+				}],
+				"restartPolicy": "Always",
+				"terminationGracePeriodSeconds": 30,
+				"dnsPolicy": "ClusterFirst",
+				"securityContext": {
+					},
+				"volumes": [{
+					"name": "demo-xsld-volume",
+					"emptyDir": {
+					}
+				}]
+			}
+		}
+	}
+}

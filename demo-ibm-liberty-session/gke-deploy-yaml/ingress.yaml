@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+   name: session-ingress
+spec:
+   rules:
+   -  http:
+         paths:
+         -  path: /demo-jetty-session/*
+            backend:
+               serviceName: jetty-session-nodeport-service
+               servicePort: 8080
+         -  path: /demo-ibm-liberty-session/*
+            backend:
+               serviceName: ibm-liberty-session-nodeport-service
+               servicePort: 9080

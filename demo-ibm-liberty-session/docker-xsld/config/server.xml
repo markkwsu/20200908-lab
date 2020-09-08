@@ -1,0 +1,28 @@
+<server description="Liberty Server Session Management Demo">
+
+	<!-- Enable features -->
+	<featureManager>
+		<feature>webProfile-7.0</feature>
+		<feature>elasticCacheClient-1.0</feature>
+	</featureManager>
+
+	<variable name="default.http.port" defaultValue="9080" />
+	<variable name="default.https.port" defaultValue="9443" />
+	<variable name="app.context.root"
+		defaultValue="demo-ibm-liberty-session" />
+	<httpEndpoint host="*" httpPort="${default.http.port}"
+		httpsPort="${default.https.port}" id="defaultHttpEndpoint" />
+	<httpSession idReuse="true" />
+	<httpSessionElasticCache enabled="true"
+		elasticCacheClientRef="client1" />
+	<elasticCacheClient id="client1">
+		<elasticCacheCatalogCluster>
+			<server
+				host="gke-cluster-session-demo-default-pool-7a661066-bm8t"
+				port="4809" />
+		</elasticCacheCatalogCluster>
+	</elasticCacheClient>
+	<webApplication location="demo-ibm-liberty-session.war"
+		contextRoot="${app.context.root}" />
+
+</server>

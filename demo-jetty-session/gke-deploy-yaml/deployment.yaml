@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jetty-session-deployment
+spec:
+  selector:
+    matchLabels:
+      app: jetty-session
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: jetty-session
+    spec:
+      containers:
+      - name: jetty-session
+        image: asia.gcr.io/first-demo-marksu-001/demo-jetty-session:2
+        ports:
+        - containerPort: 9080
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+   name: jetty-session-hpa
+   namespace: default
+   labels:
+      app: jetty-session-hpa
+spec:
+   scaleTargetRef:
+      kind: Deployment
+      name: jetty-session-hpa
+      apiVersion: apps/v1beta1
+   minReplicas: 2
+   maxReplicas: 2
+   targetCPUUtilizationPercentage: 80

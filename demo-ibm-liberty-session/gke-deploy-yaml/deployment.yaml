@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibm-liberty-session-deployment
+spec:
+  selector:
+    matchLabels:
+      app: ibm-liberty-session
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: ibm-liberty-session
+    spec:
+      containers:
+      - name: ibm-liberty-session
+        image: asia.gcr.io/first-demo-marksu-001/demo-ibm-liberty-session:43
+        ports:
+        - containerPort: 9080
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+   name: ibm-liberty-session-hpa
+   namespace: default
+   labels:
+      app: ibm-liberty-session-hpa
+spec:
+   scaleTargetRef:
+      kind: Deployment
+      name: ibm-liberty-session-hpa
+      apiVersion: apps/v1beta1
+   minReplicas: 2
+   maxReplicas: 2
+   targetCPUUtilizationPercentage: 80
