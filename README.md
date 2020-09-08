@@ -38,6 +38,7 @@
 
 ## 將 Jetty 部署在 GKE 上面並且配置好 session persistence
 
+-   先啟用 Google Container Registry API
 -   先啟用 Google Cloud Datastore
 -   配置使用 Google Cloud Datastore 的 Service Account
 -   透過 Maven 在 local 端打包好 JavaEE demo application
